@@ -1,0 +1,19 @@
+/*
+plugin.tx_pbfilelist {
+	view {
+		templateRootPath = {$plugin.tx_pbfilelist.view.templateRootPath}
+		partialRootPath = {$plugin.tx_pbfilelist.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_pbfilelist.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_pbfilelist.persistence.storagePid}
+	}
+	features {
+		# uncomment the following line to enable the new Property Mapper.
+		# rewrittenPropertyMapper = 1
+	}
+}
+*/
+plugin.tx_pbfilelist{
+	settings.templateFile = {$plugin.tx_pbfilelist.templateFile}
+}

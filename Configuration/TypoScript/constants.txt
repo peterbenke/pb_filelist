@@ -1,0 +1,21 @@
+/*
+plugin.tx_pbfilelist {
+	view {
+		# cat=plugin.tx_pbfilelist/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:pb_filelist/Resources/Private/Templates/
+		# cat=plugin.tx_pbfilelist/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:pb_filelist/Resources/Private/Partials/
+		# cat=plugin.tx_pbfilelist/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:pb_filelist/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_pbfilelist//a; type=string; label=Default storage PID
+		storagePid =
+	}
+}
+*/
+plugin.tx_pbfilelist {
+	# cat=plugin.tx_pbfilelist/file; type=string; label=Path to template
+	templateFile = 
+}
+

@@ -1,0 +1,25 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+	<f:if condition="{files}">
+		
+		<f:then>
+			<p class="numberOfFiles">{numberOfFiles} <f:translate key="plugin.filelist.files" />:</p>
+
+			<ul>
+				<f:for each="{files}" as="file">
+					<li><a class="{file.extension}" href="{file.path}" title="{file.title}">{file.filename}</a> <span class="fileinfo">({file.filesize}, {file.dateFormatted})</span></li>
+				</f:for>
+			</ul>
+		</f:then>
+
+		<f:else>
+			<p class="error"><f:translate key="plugin.filelist.emptyresult"></f:translate></p>
+		</f:else>		
+		
+	</f:if>
+
+	
+</f:section>
+

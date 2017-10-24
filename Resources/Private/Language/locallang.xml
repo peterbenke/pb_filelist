@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for the Filelist from a directory extension in the FRONTEND</description>
+	</meta>
+	<data type="array">
+
+		<languageKey index="default" type="array">
+			<label index="plugin.filelist.files">Files</label>
+			<label index="plugin.filelist.format.date">m.d.Y</label>
+			<label index="plugin.filelist.emptyresult">No files found.</label>
+		</languageKey>
+		
+
+		<languageKey index="de" type="array">
+			<label index="plugin.filelist.files">Dateien</label>
+			<label index="plugin.filelist.format.date">d.m.Y</label>
+			<label index="plugin.filelist.emptyresult">Keine Dateien gefunden.</label>
+		</languageKey>
+
+
+	</data>
+</T3locallang>
