@@ -1,9 +1,10 @@
 <?php
+namespace PeterBenke\PbFilelist\Controller;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Peter Benke <peter.benke@nttdata.com>
+ *  (c) 2013-2017 Peter Benke <info@typomotor.de>
  *
  *  All rights reserved
  *
@@ -26,26 +27,36 @@
 
 /**
  *
- *
- * @package pb_filelist
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * FilelistController
  *
  */
-class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Controller_ActionController {
+class FilelistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+
+	/**
+	 * @var \TYPO3\CMS\Core\Resource\ResourceFactory
+	 */
+	var $resourceFactory;
 
 	/**
 	 * Extension configuration
 	 *
 	 * @var	array
 	 */	
-	private $extConf = array();
+	private $extConf = [];
 	
 	/**
-	 * DenyFileExtensions
+	 * DenyFileExtensions () defined in extension configuration
 	 *
 	 * @var	array
 	 */	
-	private $denyFileExtensions = array();	
+	private $denyFileExtensions = [];
+
+	/**
+	 * Only use file extensions (defined in flexform)
+	 *
+	 * @var array
+	 */
+	private $onlyUseFileExtensions = [];
 	
 	
 	/*
@@ -57,15 +68,27 @@ class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Control
 	public function initializeAction(){
 
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pb_filelist']);
-		$this->denyFileExtensions = explode(',', $this->extConf['denyFileExtensions']);
-		
-		for($i=0;$i<count($this->denyFileExtensions);$i++){
-			$this->denyFileExtensions[$i] = trim($this->denyFileExtensions[$i]);
+
+		// Extension configuration
+		if(!empty(trim($this->extConf['denyFileExtensions']))){
+			$this->denyFileExtensions = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', strtolower($this->extConf['denyFileExtensions']));
 		}
-	
+
+		// Flexform
+		if(!empty(trim($this->settings['fileextensions']))){
+			$this->onlyUseFileExtensions = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', strtolower($this->settings['fileextensions']));
+		}
+
 	}
-	
-	
+
+	/**
+	 * @return void
+	 */
+	public function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view){
+
+		$this->resourceFactory = $this->objectManager->get('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
+
+	}
 	
 	/**
 	 * action index
@@ -76,75 +99,55 @@ class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Control
 	 */
 	public function indexAction() {
 
-		if(!empty($this->settings['templateFile'])){
-			$this->view->setTemplatePathAndFilename($this->settings['templateFile']);
-		}
-		
-		$folder = PATH_site . $this->settings['folder'];
-
-		if (
-				!is_dir($folder)
-				||
-				PATH_site == ''
-				||
-				empty($this->settings['folder'])
-				||
-				preg_match('/^typo3/', $this->settings['folder'])
-		){
+		if(empty($this->settings['folder'])){
 			return;
 		}
 
-		// Get the filelist
-		if(!empty($this->settings['fileextensions'])){
-			$this->settings['fileextensions'] = trim($this->settings['fileextensions']);
-			$filelist = glob($folder . '*.{' . $this->settings['fileextensions'] . '}', GLOB_BRACE);
-		} else {
-			$filelist = glob($folder . '*.*');
-		}
-		
-		$files = array();
+		$folderObj = $this->resourceFactory->retrieveFileOrFolderObject($this->settings['folder']);
+		$filesOrig = $folderObj->getFiles();
 
-		// Get filetime data
-		for($i=0;$i<count($filelist);$i++){
+		$files = [];
+		$count = 0;
 
-			$deny = false;
-			for($j=0;$j<count($this->denyFileExtensions);$j++){
-				if(preg_match('/\.' . $this->denyFileExtensions[$j] . '$/', $filelist[$i])){
-					$deny = true;
-					break;
-				}
+		/** @var \TYPO3\CMS\Core\Resource\File $file */
+		foreach($filesOrig as $file){
+
+			// Check, if file extension is allowed
+			$extension = strtolower($file->getExtension());
+
+			$fileExtensionAllowed = true;
+
+			if(in_array($extension, $this->denyFileExtensions)){
+				$fileExtensionAllowed = false;
 			}
-			
-			if(!$deny){
-				
-				$files[$i]['path']					= str_replace(PATH_site, '', $filelist[$i]);
-				$files[$i]['filename']			= str_replace('/', '', strrchr($filelist[$i], '/'));
-				$files[$i]['title']					= $files[$i]['filename'];
-				$files[$i]['extension']			= str_replace('.', '', strrchr($filelist[$i], '.'));
-				$files[$i]['date']					= filemtime($filelist[$i]);
-				$files[$i]['dateFormatted']	= date(Tx_Extbase_Utility_Localization::translate('plugin.filelist.format.date', $this->extensionName), filemtime($filelist[$i]));
-				$files[$i]['filesize']			= $this->byteSize(filesize($filelist[$i]));
 
-				// Cut the filename
+			if(!in_array($extension, $this->onlyUseFileExtensions) && !empty($this->onlyUseFileExtensions)){
+				$fileExtensionAllowed = false;
+			}
+
+			if($fileExtensionAllowed){
+
+				$files[$count]['fileObject'] = $file;
+				$files[$count]['dateFormatted'] = date(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pbfilelist.format.date', $this->extensionName), $file->getProperty('modification_date'));
+				$files[$count]['filename'] = $file->getName();
+				$files[$count]['filesize'] = $this->byteSize($file->getSize());
+
+				$files[$count]['sortby_path'] = strtolower($file->getName());
+				$files[$count]['sortby_date'] = $file->getProperty('modification_date');
+				$files[$count]['sortby_size'] = $file->getSize();
+
 				if(intval($this->settings['cutfilename']) > 0){
-					$files[$i]['filename'] = $this->cutFilename($files[$i]['filename'], intval($this->settings['cutfilename']));
+					$files[$count]['filename'] = $this->cutFilename($files[$count]['filename'], intval($this->settings['cutfilename']));
 				}
-				
-				// Check absRefPrefix
-				if(!empty($GLOBALS['TSFE']->config['config']['absRefPrefix'])){
-					$files[$i]['path'] = $GLOBALS['TSFE']->config['config']['absRefPrefix'] . $files[$i]['path'];
-				}
+
+				$count++;
 
 			}
 
 		}
-
-		// Reset the Array-Index (0,1,2,...)
-		$files = array_merge($files);
 
 		// Now get the new, sorted array
-		$files = $this->getSortedArray($files, $this->settings['sortBy'], $this->settings['order']);
-
+		$files = $this->getSortedArray($files, 'sortby_' . $this->settings['sortBy'], $this->settings['order']);
 		$this->view->assign('numberOfFiles', count($files));
 		$this->view->assign('files', $files);
 
@@ -158,28 +161,24 @@ class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Control
 	 * @param string order (asc/desc)
 	 * @return array
 	 */
-	private function getSortedArray($array, $sortByKey = 'path', $order = 'asc'){
-		
-		$newArray = array();
+	private function getSortedArray($array, $sortByKey = 'sortby_path', $order = 'asc'){
+
+		$newArray = [];
 
 		for($i=0;$i<count($array);$i++){
 			
-			$key = $array[$i][$sortByKey] . '-' . $i;
-			
-			$newArray[$key]['path']						= $array[$i]['path'];
-			$newArray[$key]['filename']				= $array[$i]['filename'];
-			$newArray[$key]['title']					= $array[$i]['title'];
-			$newArray[$key]['extension']			= $array[$i]['extension'];
-			$newArray[$key]['date']						= $array[$i]['date'];
-			$newArray[$key]['dateFormatted']	= $array[$i]['dateFormatted'];
-			$newArray[$key]['filesize']				= $array[$i]['filesize'];
-			
+			$key = $array[$i][$sortByKey] . $i; // So we never have to same keys
+			$newArray[$key]['fileObject'] = $array[$i]['fileObject'];
+			$newArray[$key]['dateFormatted'] = $array[$i]['dateFormatted'];
+			$newArray[$key]['filename'] = $array[$i]['filename'];
+			$newArray[$key]['filesize'] = $array[$i]['filesize'];
+
 		}
 
 		if($order == 'desc'){
-			rsort($newArray);
+			krsort($newArray);
 		} else {
-			sort($newArray);
+			ksort($newArray);
 		}
 		
 		return $newArray;
@@ -208,9 +207,9 @@ class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Control
 	}
 	
 	/*
-	 * Returns a formatted filesize
-	 * @param string unformatted filesize
-	 * @return string formatted filesize
+	 * Returns a formatted file size
+	 * @param string not formatted file size
+	 * @return string formatted file size
 	 */
 	private function byteSize($bytes){
 
@@ -218,14 +217,14 @@ class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Control
 			return false;
 		}
 
-		$map = array(
-			// 'GB' => array(1073741824, 1),
-			'GB' => array(1024000000, 1),
-			// 'MB' => array(1048576, 2),
-			'MB' => array(1024000, 2),
-			'KB' => array(1024, 2),
-			'Bytes' => array(1, 0),
-		);
+		$map = [
+			// 'GB' => [1073741824, 1],
+			'GB' => [1024000000, 1],
+			// 'MB' => [1048576, 2],
+			'MB' => [1024000, 2],
+			'KB' => [1024, 2],
+			'Bytes' => [1, 0],
+		];
 
 		foreach($map as $k => $v){
 			if ($bytes >= $v[0]){
@@ -242,7 +241,5 @@ class Tx_PbFilelist_Controller_FilelistController extends Tx_Extbase_MVC_Control
 
 		return sprintf ('%s %s',$f, $k);
 	}	
-	
 
 }
-?>

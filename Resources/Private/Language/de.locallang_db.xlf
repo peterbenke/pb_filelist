@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2017-10-24T20:16:45Z" product-name="pb_filelist">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_pbfilelist.plugin.title">
+				<target>Dateiliste</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.plugin.description">
+				<target>Erstellt eine Dateiliste aus dem Inhalt eines Ordners</target>
+			</trans-unit>
+
+			<trans-unit id="tx_pbfilelist.flexform.label.folder">
+				<target>Ordner</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.label.sortBy">
+				<target>Sortieren nach</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.select.sortBy.filename">
+				<target>Dateiname</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.select.sortBy.date">
+				<target>Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.select.sortBy.size">
+				<target>Dateigröße</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.label.order">
+				<target>Reihenfolge</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.select.order.asc">
+				<target>Aufsteigend</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.select.order.desc">
+				<target>Absteigend</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.label.fileextensions">
+				<target>Dateiendungen (Komma separiert, z.B. "pdf,jpg"), leer lassen für alle Dateien</target>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.flexform.label.cutfilename">
+				<target>Dateiname kürzen nach Anzahl Zeichen (0 = ohne Kürzen)</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

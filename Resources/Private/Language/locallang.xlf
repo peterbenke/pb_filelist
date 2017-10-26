@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2017-10-24T20:16:45Z" product-name="pb_filelist">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_pbfilelist.files">
+				<source>Files</source>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.format.date">
+				<source>m.d.Y</source>
+			</trans-unit>
+			<trans-unit id="tx_pbfilelist.emptyresult">
+				<source>No files found.</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

@@ -1,39 +1,20 @@
 <?php
-
-########################################################################
-# Extension Manager/Repository config file for ext "pb_filelist".
-#
-# Auto generated 09-08-2015 18:46
-#
-# Manual updates:
-# Only the data in the array - everything else is removed by next
-# writing. "version" and "dependencies" must not be touched!
-########################################################################
-
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
 	'title' => 'Filelist',
 	'description' => 'Generates a filelist from a directory',
-	'category' => 'plugin',
-	'shy' => 1,
-	'version' => '2.0.0',
-	'dependencies' => '',
-	'conflicts' => '',
-	'priority' => '',
-	'loadOrder' => '',
-	'TYPO3_version' => '4.5.0-6.2.99',
-	'PHP_version' => '',
-	'module' => '',
-	'state' => 'beta',
-	'uploadfolder' => 1,
-	'createDirs' => '',
-	'modify_tables' => '',
-	'clearcacheonload' => 1,
-	'lockType' => '',
+	'category' => 'fe',
 	'author' => 'Peter Benke',
-	'author_email' => 'peter.benke@nttdata.com',
-	'author_company' => '',
-	'CGLcompliance' => '',
-	'CGLcompliance_note' => '',
-);
-
-?>
+	'author_email' => 'info@typomotor.de',
+	'author_company' => 'TYPO motor',
+	'state' => 'stable',
+	'uploadfolder' => 0,
+	'clearCacheOnLoad' => 1,
+	'version' => '3.0.0',
+	'constraints' => [
+		'depends' => [
+			'typo3' => '7.6.0-8.7.99',
+		],
+		'conflicts' => [],
+		'suggests' => [],
+	],
+];
