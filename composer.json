@@ -1,0 +1,30 @@
+{
+  "name": "peterbenke/pb-filelist",
+  "type": "typo3-cms-extension",
+  "description": "Generates a filelist from a directory",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "frontend",
+    "list"
+  ],
+  "homepage": "http://www.typomotor.de",
+  "authors": [
+    {
+      "name": "Peter Benke",
+      "role": "Developer",
+      "homepage": "http://www.typomotor.de"
+    }
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms-core": ">=7.6.0 <=8.7.99"
+  },
+  "autoload": {
+    "psr-4": {
+      "PeterBenke\\PbConcertlist\\": "Classes"
+    }
+  }
+}
