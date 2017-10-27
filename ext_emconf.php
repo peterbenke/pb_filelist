@@ -1,7 +1,7 @@
 <?php
 $EM_CONF[$_EXTKEY] = [
 	'title' => 'Filelist',
-	'description' => 'Generates a filelist from a directory',
+	'description' => 'Generates a filelist from a directory. Sort the files by name, date or size.',
 	'category' => 'fe',
 	'author' => 'Peter Benke',
 	'author_email' => 'info@typomotor.de',
