@@ -22,6 +22,13 @@ If you want to use another template, go to the Constant-editor and choose “PLU
 You can orient yourself, if you look in the original template, which you can find here:
 /typo3conf/ext/pb_filelist/Resources/Private/Templates/Filelist/index.html
 
+Format Filsize
+--------------
+
+Per default the filesize is formatted as follows:
+Decimal point: , / Thousands separator: .
+You can change this in the Constant-editor.
+
 Date format
 -----------
 

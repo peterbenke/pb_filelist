@@ -4,4 +4,10 @@ plugin.tx_pbfilelist {
 		partialRootPaths.0 = {$plugin.tx_pbfilelist.view.partialRootPath}
 		layoutRootPaths.0 = {$plugin.tx_pbfilelist.view.layoutRootPath}
 	}
+	settings {
+		formatFileSize{
+			decimalPoint = {$plugin.tx_pbfilelist.settings.formatFileSize.decimalPoint}
+			thousandsSeparator = {$plugin.tx_pbfilelist.settings.formatFileSize.thousandsSeparator}
+		}
+	}
 }

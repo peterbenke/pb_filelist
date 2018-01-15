@@ -7,4 +7,12 @@ plugin.tx_pbfilelist {
 		# cat=plugin.tx_tx_pbfilelist/file; type=string; label=Path to template layouts (FE)
 		layoutRootPath = EXT:tx_pbfilelist/Resources/Private/Layouts/
 	}
+	settings {
+		formatFileSize{
+			# cat=plugin.tx_tx_pbfilelist/format; type=string; label=Format filesize - decimal point
+			decimalPoint = ,
+			# cat=plugin.tx_tx_pbfilelist/format; type=string; label=Format filesize - thousands separator
+			thousandsSeparator = .
+		}
+	}
 }

@@ -233,7 +233,14 @@ class FilelistController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 		}
 
 		# $f = number_format($bytes / $v[0], $v[1],',','.');
-		$f = number_format($bytes / $v[0], 1,',','.');
+		// $f = number_format($bytes / $v[0], 1,',','.');
+		// print_r($this->settings);
+		$f = number_format(
+			$bytes / $v[0],
+			1,
+			$this->settings['formatFileSize']['decimalPoint'],
+			$this->settings['formatFileSize']['thousandsSeparator']
+		);
 
 		if ($bytes < 2){
 			$k = 'Byte';
