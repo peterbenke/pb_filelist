@@ -7,5 +7,5 @@ conf.py:
   copyright: 2017
   project: Generates a filelist from a directory. Sort the files by name, date or size.
   version: 3.0
-  release: 3.0.1
+  release: 3.0.2
 ...
